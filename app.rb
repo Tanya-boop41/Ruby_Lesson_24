@@ -32,14 +32,19 @@ post '/visit' do
 			:date_time => 'Введите дату и время',
 			:hairstylist => 'Выберите парикмахера'}
 
-	hh.each do |key, value|
-		if params[key] == "" || params[key] == "none"
-			@error = hh[key]
-			return erb :visit
-		end 
+	#hh.each do |key, value|
+	#	if params[key] == "" || params[key] == "none"
+	#		@error = hh[key]
+	#		return erb :visit
+	#	end 
+	#end
+
+	@error = hh.select {|key,_| params[key] == ""}.values.join(", ")
+
+	if @error != ''
+		return erb :visit
 	end
 
-	
 	f = File.open 'C:/Projects/Ruby_Lesson_22/public/users.txt', 'a'
 	f.write "User: #{@username}, Phone: #{@phone}, Date and time: #{@date_time}, Hairstylist: #{@hairstylist}, Color: #{@color}\n"
 	f.close
